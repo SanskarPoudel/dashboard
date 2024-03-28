@@ -2,7 +2,7 @@ require("dotenv").config();
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import UserRoutes from "./routes/userRoutes";
 const app = express();
 
 app.use(express.json());
@@ -14,6 +14,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use("/api/user", UserRoutes);
 
 const port = process.env.PORT || 8000;
 
