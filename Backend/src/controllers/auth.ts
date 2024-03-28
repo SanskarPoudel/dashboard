@@ -3,12 +3,13 @@ import db from "../db/config";
 import bcrypt from "bcrypt";
 import { FieldPacket } from "mysql2";
 import { generateToken, setSecureCookie } from "../utils/auth";
+import { User } from "../models";
 
 const ACCESS_TOKEN_LIFE = process.env.ACCESS_TOKEN_LIFE || "1d";
 
 export const Login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body as { email: string; password: string };
+    const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
@@ -17,21 +18,16 @@ export const Login = async (req: Request, res: Response) => {
       });
     }
 
-    const finalMail = email.toLocaleLowerCase().trim();
+    const user: any = await User.findOne({
+      where: { email: email.trim().toLowerCase() },
+    });
 
-    const [users]: [any[], FieldPacket[]] = await db.query(
-      "SELECT * FROM users WHERE email = ? LIMIT 1",
-      [finalMail]
-    );
-
-    if (users.length === 0) {
+    if (!user) {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
       });
     }
-
-    const user = users[0];
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
@@ -67,12 +63,7 @@ export const Login = async (req: Request, res: Response) => {
 
 export const Signup = async (req: Request, res: Response) => {
   try {
-    const { email, password, first_name, last_name } = req.body as {
-      email: string;
-      password: string;
-      first_name: string;
-      last_name: string;
-    };
+    const { email, password, first_name, last_name } = req.body;
 
     if (!email || !password || !first_name || !last_name) {
       return res.status(400).json({
@@ -81,14 +72,11 @@ export const Signup = async (req: Request, res: Response) => {
       });
     }
 
-    const finalMail = email.toLocaleLowerCase().trim();
+    const existingUser = await User.findOne({
+      where: { email: email.trim().toLowerCase() },
+    });
 
-    const [user]: [any[], FieldPacket[]] = await db.query(
-      `SELECT * FROM users WHERE email = ?`,
-      [finalMail]
-    );
-
-    if (user.length > 0) {
+    if (existingUser) {
       return res.status(409).json({
         success: false,
         message: "User with this email already exists",
@@ -97,38 +85,33 @@ export const Signup = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result: any = await db.query(
-      `INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)`,
-      [finalMail, hashedPassword, first_name, last_name]
+    const newUser: any = await User.create({
+      email: email.trim().toLowerCase(),
+      password: hashedPassword,
+      first_name,
+      last_name,
+    });
+
+    const accessToken = generateToken(
+      {
+        id: newUser.id,
+        role_id: newUser.role_id || null,
+      },
+      ACCESS_TOKEN_LIFE
     );
 
-    if (result[0].affectedRows && result[0].affectedRows > 0) {
-      const accessToken = generateToken(
-        {
-          id: result[0].insertId,
-          role_id: null,
-        },
-        ACCESS_TOKEN_LIFE
-      );
+    setSecureCookie(res, "token", accessToken, 24);
 
-      setSecureCookie(res, "token", accessToken, 24);
-
-      return res.status(201).json({
-        success: true,
-        message: "Signed Up Successfully",
-        user: {
-          id: result[0].insertId,
-          email: finalMail,
-          first_name,
-          last_name,
-        },
-      });
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: "Something went wrong. Try Again later",
-      });
-    }
+    return res.status(201).json({
+      success: true,
+      message: "Signed Up Successfully",
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+      },
+    });
   } catch (err) {
     console.error("Signup error:", err);
     return res.status(500).json({

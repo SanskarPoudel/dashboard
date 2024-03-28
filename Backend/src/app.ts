@@ -1,8 +1,9 @@
 require("dotenv").config();
-import express from "express";
+import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import UserRoutes from "./routes/userRoutes";
+import AdminRoutes from "./routes/adminRoutes";
 const app = express();
 
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use("/api/user", UserRoutes);
+app.use("/api/admin", AdminRoutes);
 
 const port = process.env.PORT || 8000;
 

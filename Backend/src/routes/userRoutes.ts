@@ -9,10 +9,4 @@ router.post("/signup", Signup);
 
 router.post("/login", Login);
 
-router.get(
-  "/manageUsers",
-  isAuthenticated,
-  permissionCheck([{ feature: "admin", access: "write" }])
-);
-
 export default router;

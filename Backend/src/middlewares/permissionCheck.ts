@@ -1,13 +1,6 @@
 import { Response, NextFunction } from "express";
 import { CustomRequest } from "./auth";
-import db from "../db/config";
-import { RowDataPacket, FieldPacket } from "mysql2";
-
-interface UserPermission extends RowDataPacket {
-  feature_name: string;
-  access: string;
-  enabled: boolean;
-}
+import { Role, Feature } from "../models";
 
 export function permissionCheck(
   requiredPermissions: { feature: string; access: string }[]
@@ -16,33 +9,35 @@ export function permissionCheck(
     try {
       const role_id = req.user?.role_id;
       if (!role_id) {
-        return res.status(403).json({ message: "User role not found" });
+        return res.status(403).json({ message: "Insufficient Permissions" });
       }
 
-      const query = `
-        SELECT f.feature_name, rf.access, rf.enabled
-        FROM role_features rf
-        JOIN features f ON rf.feature_id = f.id
-        WHERE rf.role_id = ? AND f.active = true
-      `;
+      const roleWithFeatures: any = await Role.findByPk(role_id, {
+        include: [
+          {
+            model: Feature,
+            through: {
+              attributes: ["enabled", "access"],
+            },
+            where: { active: true },
+            required: true,
+          },
+        ],
+      });
 
-      const [results]: [UserPermission[], FieldPacket[]] = await db.query(
-        query,
-        [role_id]
-      );
+      if (!roleWithFeatures) {
+        return res.status(404).json({ message: "Role not found" });
+      }
 
-      const permissionMap = new Map<
-        string,
-        { access: string; enabled: boolean }
-      >(
-        results.map((p) => [
-          p.feature_name,
-          { access: p.access, enabled: p.enabled },
+      const permissionMap = new Map(
+        roleWithFeatures.Features.map((f: any) => [
+          f.feature_name,
+          { access: f.RoleFeature.access, enabled: f.RoleFeature.enabled },
         ])
       );
 
       const hasPermission = requiredPermissions.every((rp) => {
-        const permission = permissionMap.get(rp.feature);
+        const permission: any = permissionMap.get(rp.feature);
         return (
           permission &&
           permission.enabled &&
