@@ -6,6 +6,7 @@ import { RowDataPacket, FieldPacket } from "mysql2";
 interface UserPermission extends RowDataPacket {
   feature_name: string;
   access: string;
+  enabled: boolean;
 }
 
 export function permissionCheck(
@@ -19,26 +20,34 @@ export function permissionCheck(
       }
 
       const query = `
-        SELECT f.feature_name, rf.access
+        SELECT f.feature_name, rf.access, rf.enabled
         FROM role_features rf
         JOIN features f ON rf.feature_id = f.id
         WHERE rf.role_id = ? AND f.active = true
       `;
 
-      const [results, fields]: [
-        RowDataPacket[] | RowDataPacket[][],
-        FieldPacket[]
-      ] = await db.query(query, [role_id]);
+      const [results]: [UserPermission[], FieldPacket[]] = await db.query(
+        query,
+        [role_id]
+      );
 
-      const userPermissions: UserPermission[] = results as UserPermission[];
-
-      const permissionMap = new Map(
-        userPermissions.map((p) => [p.feature_name, p.access])
+      const permissionMap = new Map<
+        string,
+        { access: string; enabled: boolean }
+      >(
+        results.map((p) => [
+          p.feature_name,
+          { access: p.access, enabled: p.enabled },
+        ])
       );
 
       const hasPermission = requiredPermissions.every((rp) => {
-        const access = permissionMap.get(rp.feature);
-        return access && (access === rp.access || access === "write");
+        const permission = permissionMap.get(rp.feature);
+        return (
+          permission &&
+          permission.enabled &&
+          (permission.access === rp.access || permission.access === "write")
+        );
       });
 
       if (!hasPermission) {
