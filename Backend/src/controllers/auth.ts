@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import db from "../db/config";
 import bcrypt from "bcrypt";
 import { FieldPacket } from "mysql2";
-import jwt from "jsonwebtoken";
+import { generateToken, setSecureCookie } from "../utils/auth";
+
+const ACCESS_TOKEN_LIFE = process.env.ACCESS_TOKEN_LIFE || "5m";
+const REFRESH_TOKEN_LIFE = process.env.REFRESH_TOKEN_LIFE || "1d";
+
 export const Login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body as { email: string; password: string };
@@ -39,23 +43,24 @@ export const Login = async (req: Request, res: Response) => {
       });
     }
 
-    const token = jwt.sign(
+    const accessToken = generateToken(
       {
         id: user.id,
         role_id: user.role_id,
       },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: "1d",
-      }
+      ACCESS_TOKEN_LIFE
     );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      //   secure: true,
-      sameSite: "strict",
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    });
+    const refreshToken = generateToken(
+      {
+        id: user.id,
+      },
+      REFRESH_TOKEN_LIFE
+    );
+
+    setSecureCookie(res, "access", accessToken, 5 / 60);
+
+    setSecureCookie(res, "refresh", refreshToken, 24);
 
     return res.status(200).json({
       success: true,
@@ -108,23 +113,24 @@ export const Signup = async (req: Request, res: Response) => {
     );
 
     if (result[0].affectedRows && result[0].affectedRows > 0) {
-      const token = jwt.sign(
+      const accessToken = generateToken(
         {
           id: result[0].insertId,
           role_id: null,
         },
-        process.env.JWT_SECRET as string,
-        {
-          expiresIn: "1d",
-        }
+        ACCESS_TOKEN_LIFE
       );
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        //   secure: true,
-        sameSite: "strict",
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      });
+      const refreshToken = generateToken(
+        {
+          id: result[0].insertId,
+        },
+        REFRESH_TOKEN_LIFE
+      );
+
+      setSecureCookie(res, "access", accessToken, 5 / 60);
+
+      setSecureCookie(res, "refresh", refreshToken, 24);
 
       return res.status(201).json({
         success: true,
