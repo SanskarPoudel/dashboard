@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 import { FieldPacket } from "mysql2";
 import { generateToken, setSecureCookie } from "../utils/auth";
 
-const ACCESS_TOKEN_LIFE = process.env.ACCESS_TOKEN_LIFE || "5m";
-const REFRESH_TOKEN_LIFE = process.env.REFRESH_TOKEN_LIFE || "1d";
+const ACCESS_TOKEN_LIFE = process.env.ACCESS_TOKEN_LIFE || "1d";
 
 export const Login = async (req: Request, res: Response) => {
   try {
@@ -51,16 +50,7 @@ export const Login = async (req: Request, res: Response) => {
       ACCESS_TOKEN_LIFE
     );
 
-    const refreshToken = generateToken(
-      {
-        id: user.id,
-      },
-      REFRESH_TOKEN_LIFE
-    );
-
-    setSecureCookie(res, "access", accessToken, 5 / 60);
-
-    setSecureCookie(res, "refresh", refreshToken, 24);
+    setSecureCookie(res, "token", accessToken, 24);
 
     return res.status(200).json({
       success: true,
@@ -121,16 +111,7 @@ export const Signup = async (req: Request, res: Response) => {
         ACCESS_TOKEN_LIFE
       );
 
-      const refreshToken = generateToken(
-        {
-          id: result[0].insertId,
-        },
-        REFRESH_TOKEN_LIFE
-      );
-
-      setSecureCookie(res, "access", accessToken, 5 / 60);
-
-      setSecureCookie(res, "refresh", refreshToken, 24);
+      setSecureCookie(res, "token", accessToken, 24);
 
       return res.status(201).json({
         success: true,

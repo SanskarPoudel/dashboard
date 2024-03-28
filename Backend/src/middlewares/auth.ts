@@ -15,13 +15,7 @@ export const isAuthenticated = async (
 ) => {
   const jwtSecret = process.env.JWT_SECRET as string;
 
-  const authHeader = req.header("Authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
-
-  const token = authHeader.split(" ")[1];
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
