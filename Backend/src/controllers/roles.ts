@@ -27,3 +27,25 @@ export const allRoles = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const createRole = async (req: Request, res: Response) => {
+  try {
+    const { name, features } = req.body as {
+      name: string;
+      features: { access: string; feature_id: number; enabled: boolean }[];
+    };
+
+    if (!name || !features || features.length === 0) {
+      return res.status(400).json({
+        succes: false,
+        message: "Please enter all required fields",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong. Try Again Later",
+    });
+  }
+};
