@@ -35,4 +35,4 @@ INSERT INTO roles (role_name) VALUES ('Administrator');
 
 INSERT INTO role_features (role_id, feature_id, enabled, access) VALUES (1, 1, TRUE, 'write');
 
-INSERT INTO users (first_name, last_name, email, password, role_id) VALUES ('Admin', 'User', 'admin@example.com', 'admin_password', 1);
+INSERT INTO users (first_name, last_name, email, password, role_id) VALUES ('Admin', 'User', 'admin@example.com', '$2b$10$Qt7t0VZC74FCWi0..sAMVO5DUAXNpzSD2bpWY8HsM1tXprqTde.sW', 1);  -- password  is "admin_password"
