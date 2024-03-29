@@ -33,6 +33,50 @@ export const AllUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const userDetails = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "UnAuthorized",
+      });
+    }
+
+    const userDetails = await User.findOne({
+      where: { id: userId },
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: Role,
+          attributes: ["id", "role_name"],
+          include: [
+            {
+              model: Feature,
+              attributes: ["id", "feature_name", "active"],
+              through: {
+                attributes: ["enabled", "access"],
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      details: userDetails,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "UnAuthorized",
+    });
+  }
+};
+
 export const assignRole = async (req: CustomRequest, res: Response) => {
   try {
     const { role_id, user_id } = req.body as {
