@@ -8,7 +8,7 @@ const UserInfoContext = createContext();
 const apiUrl = process.env.API_URL;
 export const UserInfoProvider = ({ children }) => {
   const [featuresAccess, setFeaturesAccess] = useState([]);
-  const [userDetails, setUserDeatils] = useState([]);
+  const [userDetails, setUserDeatils] = useState(null);
   const router = useRouter();
   const fetchUserDetails = async () => {
     try {
@@ -51,10 +51,8 @@ export const UserInfoProvider = ({ children }) => {
     fetchUserDetails();
   }, [loggedInCookie]);
 
-  console.log(featuresAccess, userDetails);
-
   return (
-    <UserInfoContext.Provider value={(featuresAccess, userDetails)}>
+    <UserInfoContext.Provider value={{ featuresAccess, userDetails }}>
       {children}
     </UserInfoContext.Provider>
   );

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
+import { useUserInfo } from "../../contexts/userInfo";
 const apiUrl = process.env.API_URL;
 
 export default function Home() {
@@ -16,6 +17,14 @@ export default function Home() {
   const [signingUp, setSigningUp] = useState(false);
 
   const router = useRouter();
+
+  const { userDetails } = useUserInfo();
+
+  useEffect(() => {
+    if (userDetails) {
+      router.push("/dashboard");
+    }
+  }, [userDetails]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
