@@ -1,4 +1,3 @@
-// components/Layout.js
 import React, { useState } from "react";
 import SideBar from "./SideBar";
 import TopBar from "./TopBar";

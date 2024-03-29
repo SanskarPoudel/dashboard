@@ -1,4 +1,3 @@
-// components/TopBar.js
 import React, { useState } from "react";
 import { useUserInfo } from "../../../contexts/userInfo";
 import axios from "axios";
