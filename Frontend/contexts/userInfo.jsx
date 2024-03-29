@@ -10,6 +10,7 @@ export const UserInfoProvider = ({ children }) => {
   const [featuresAccess, setFeaturesAccess] = useState([]);
   const [userDetails, setUserDeatils] = useState(null);
   const router = useRouter();
+
   const fetchUserDetails = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/user/details`, {
@@ -40,7 +41,9 @@ export const UserInfoProvider = ({ children }) => {
         joinedAt: allDetails.createdAt,
       });
     } catch (err) {
-      toast.error("Login To Continue");
+      if (router.pathname !== "/") {
+        toast.error("Login To Continue");
+      }
       router.push("/");
     }
   };
@@ -52,7 +55,9 @@ export const UserInfoProvider = ({ children }) => {
   }, [loggedInCookie]);
 
   return (
-    <UserInfoContext.Provider value={{ featuresAccess, userDetails }}>
+    <UserInfoContext.Provider
+      value={{ featuresAccess, userDetails, setUserDeatils, setFeaturesAccess }}
+    >
       {children}
     </UserInfoContext.Provider>
   );
