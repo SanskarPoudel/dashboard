@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth";
 import { permissionCheck } from "../middlewares/permissionCheck";
 import { Login, Signup } from "../controllers/auth";
-import { AllUsers, assignRole } from "../controllers/users";
+import { AllUsers, assignRole, removeRole } from "../controllers/users";
 
 const router = express.Router();
 
@@ -22,6 +22,13 @@ router.post(
   isAuthenticated,
   permissionCheck([{ feature: "admin", access: "write" }]),
   assignRole
+);
+
+router.post(
+  "/removeRole",
+  isAuthenticated,
+  permissionCheck([{ feature: "admin", access: "write" }]),
+  removeRole
 );
 
 export default router;

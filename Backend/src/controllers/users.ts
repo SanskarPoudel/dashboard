@@ -116,6 +116,75 @@ export const assignRole = async (req: CustomRequest, res: Response) => {
   }
 };
 
+export const removeRole = async (req: CustomRequest, res: Response) => {
+  try {
+    const { user_id } = req.body as {
+      user_id: number;
+    };
+
+    if (req.user?.id === user_id) {
+      return res.status(200).json({
+        success: false,
+        message: "You cannot remove your own role",
+      });
+    }
+
+    const userExists = await User.findOne({
+      where: {
+        id: user_id,
+      },
+    });
+
+    if (!userExists) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    await User.update(
+      { role_id: null },
+      {
+        where: {
+          id: user_id,
+        },
+      }
+    );
+
+    const updatedUser = await User.findOne({
+      where: { id: user_id },
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: Role,
+          attributes: ["id", "role_name"],
+          include: [
+            {
+              model: Feature,
+              attributes: ["id", "feature_name", "active"],
+              through: {
+                attributes: ["enabled", "access"],
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Role removed Successfully",
+      updatedUser: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again",
+    });
+  }
+};
+
 async function insertInitialData() {
   try {
     const feature: any = await Feature.create({
