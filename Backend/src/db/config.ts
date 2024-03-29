@@ -9,8 +9,8 @@ const sequelize = new Sequelize(dbDatabase, dbUsername, dbPassword, {
   dialect: "mysql",
 });
 
-// sequelize.sync().then(() => {
-//   console.log("Database and tables created!");
-// });
+sequelize.sync().then(() => {
+  console.log("Database and tables created!");
+});
 
 export default sequelize;
