@@ -19,7 +19,7 @@ export const UserInfoProvider = ({ children }) => {
 
       const allDetails = response.data.details;
 
-      const allFeatures = allDetails.Role.Features.filter((rf) => {
+      const allFeatures = allDetails?.Role?.Features.filter((rf) => {
         return rf.active === true && rf.RoleFeature.enabled === true;
       }).map((rf2) => {
         const featureName = rf2.feature_name;
@@ -34,9 +34,9 @@ export const UserInfoProvider = ({ children }) => {
       setFeaturesAccess(allFeatures);
       setUserDeatils({
         id: allDetails.id,
-        roleName: allDetails.Role.role_name,
+        roleName: allDetails?.Role?.role_name,
         name: allDetails.first_name + " " + allDetails.last_name,
-        roleId: allDetails.role_id,
+        roleId: allDetails?.role_id,
         email: allDetails.email,
         joinedAt: allDetails.createdAt,
       });

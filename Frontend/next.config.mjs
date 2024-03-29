@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const environment = process.env.NODE_ENV || "development";
 let env = {};
 if (environment === "production") {
