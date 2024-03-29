@@ -13,7 +13,8 @@ export const setSecureCookie = (
   const isProduction = process.env.NODE_ENV === "production";
   res.cookie(name, token, {
     httpOnly: true,
-    secure: isProduction,
+    secure: isProduction ? true : false,
+    path: "/",
     sameSite: "strict",
     expires: new Date(Date.now() + expiresInHours * 60 * 60 * 1000),
   });
