@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { useUserInfo } from "../../../contexts/userInfo";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 const apiUrl = process.env.API_URL;
 const TopBar = ({ setIsOpen, isOpen }) => {
-  const { userDetails } = useUserInfo();
+  const { userDetails, setUserDeatils } = useUserInfo();
 
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -16,15 +16,20 @@ const TopBar = ({ setIsOpen, isOpen }) => {
   const handleLogOut = async () => {
     try {
       setLoggingOut(true);
-
       const response = await axios.get(`${apiUrl}/api/user/logout`, {
         withCredentials: true,
       });
 
-      Cookies.remove("loggedIn");
+      setUserDeatils(null);
+      setLoggingOut(false);
       router.push("/");
+      Cookies.remove("loggedIn");
     } catch (err) {
-      toast.error("Failed to Log In");
+      console.log(err);
+
+      setLoggingOut(false);
+
+      toast.error("Something went wrong");
     }
   };
 
@@ -36,12 +41,12 @@ const TopBar = ({ setIsOpen, isOpen }) => {
       >
         {isOpen ? "Close Menu" : "Open Menu"}
       </button>
-      <span>Welcome {userDetails.name} to the admin dashboard !</span>
+      <span>Welcome {userDetails?.name} to the admin dashboard !</span>
       <button
         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg"
         onClick={handleLogOut}
       >
-        Logout
+        {loggingOut ? "Logging Out.." : "Logout"}
       </button>
     </div>
   );
