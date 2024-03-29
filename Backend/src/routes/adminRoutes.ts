@@ -1,11 +1,13 @@
 import express from "express";
 import { isAuthenticated } from "../middlewares/auth";
 import { permissionCheck } from "../middlewares/permissionCheck";
-import { AllUsers } from "../controllers/users";
-import { allRoles } from "../controllers/roles";
-import { allFeatures } from "../controllers/features";
+import { AllUsers, assignRole } from "../controllers/users";
+import { allRoles, createRole } from "../controllers/roles";
+import { allFeatures, createFeature } from "../controllers/features";
 
 const router = express.Router();
+
+//USERS
 
 router.get(
   "/allUsers",
@@ -14,6 +16,15 @@ router.get(
   AllUsers
 );
 
+router.post(
+  "/assignRole",
+  isAuthenticated,
+  permissionCheck([{ feature: "admin", access: "write" }]),
+  assignRole
+);
+
+//ROLES
+
 router.get(
   "/allRoles",
   isAuthenticated,
@@ -21,11 +32,27 @@ router.get(
   allRoles
 );
 
+router.post(
+  "/createRole",
+  isAuthenticated,
+  permissionCheck([{ feature: "admin", access: "read" }]),
+  createRole
+);
+
+//FEATURES
+
 router.get(
   "/allFeatures",
   isAuthenticated,
-  permissionCheck([{ feature: "admin", access: "read" }]),
+  permissionCheck([{ feature: "admin", access: "write" }]),
   allFeatures
+);
+
+router.post(
+  "/createFeature",
+  isAuthenticated,
+  permissionCheck([{ feature: "admin", access: "write" }]),
+  createFeature
 );
 
 export default router;
