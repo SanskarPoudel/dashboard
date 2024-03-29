@@ -3,7 +3,9 @@ import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import UserRoutes from "./routes/userRoutes";
-import AdminRoutes from "./routes/adminRoutes";
+import RoleRoutes from "./routes/roleRoutes";
+import FeatureRoutes from "./routes/featureRoutes";
+
 const app = express();
 
 app.use(express.json());
@@ -17,7 +19,8 @@ app.use(
 );
 
 app.use("/api/user", UserRoutes);
-app.use("/api/admin", AdminRoutes);
+app.use("/api/role", RoleRoutes);
+app.use("/api/feature", FeatureRoutes);
 
 const port = process.env.PORT || 8000;
 
