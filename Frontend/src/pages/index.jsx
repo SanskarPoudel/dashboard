@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
@@ -57,17 +57,26 @@ export default function Home() {
 
     try {
       setSigningUp(true);
-      const response = await axios.post(`${apiUrl}/api/user/signup`, {
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        `${apiUrl}/api/user/signup`,
+        {
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success("Signed up successfully");
+      Cookies.set("loggedIn", true, { expires: 1 });
       router.push("/dashboard");
       setEmail("");
       setPassword("");
+      setFirstName("");
+      setLastName("");
       setSigningUp(false);
     } catch (err) {
       setSigningUp(false);
