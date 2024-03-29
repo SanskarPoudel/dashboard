@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth";
 import { permissionCheck } from "../middlewares/permissionCheck";
-import { Login, Signup } from "../controllers/auth";
+import { Login, Logout, Signup } from "../controllers/auth";
 import {
   AllUsers,
   assignRole,
@@ -14,6 +14,8 @@ const router = express.Router();
 router.post("/signup", Signup);
 
 router.post("/login", Login);
+
+router.get("/logout", Logout);
 
 router.get("/details", isAuthenticated, userDetails);
 

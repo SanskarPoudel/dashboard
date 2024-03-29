@@ -61,6 +61,14 @@ export const Login = async (req: Request, res: Response) => {
   }
 };
 
+export const Logout = (req: Request, res: Response) => {
+  setSecureCookie(res, "token", "", 0);
+  return res.status(200).json({
+    success: true,
+    message: "Logged Out successfully",
+  });
+};
+
 export const Signup = async (req: Request, res: Response) => {
   try {
     const { email, password, first_name, last_name } = req.body;
