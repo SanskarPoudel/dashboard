@@ -4,7 +4,6 @@ import { verify } from "jsonwebtoken";
 export interface CustomRequest extends Request {
   user?: {
     id: number;
-    role_id: number;
   };
 }
 
