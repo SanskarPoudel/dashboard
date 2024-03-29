@@ -31,49 +31,45 @@ export const allRoles = async (req: Request, res: Response) => {
 
 export const createRole = async (req: Request, res: Response) => {
   try {
-    const { name, feature } = req.body as {
+    const { name, features } = req.body as {
       name: string;
-      feature: { access: string; feature_id: number; enabled: boolean };
+      features: { access: string; feature_id: number; enabled: boolean }[];
     };
 
-    if (
-      !name ||
-      !feature ||
-      !feature.access ||
-      !feature.feature_id ||
-      !feature.enabled
-    ) {
+    if (!name || !features || features.length === 0) {
       return res.status(400).json({
         succes: false,
         message: "Please enter all required fields",
       });
     }
 
-    if (feature.access !== "write" && feature.access !== "read") {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Access",
-      });
-    }
+    for (const feature of features) {
+      if (feature.access !== "write" && feature.access !== "read") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid Access",
+        });
+      }
 
-    const featureExist: any = await Feature.findOne({
-      where: {
-        id: feature.feature_id,
-      },
-    });
-
-    if (!featureExist) {
-      return res.status(404).json({
-        success: false,
-        message: "Feature not found",
+      const featureExist: any = await Feature.findOne({
+        where: {
+          id: feature.feature_id,
+        },
       });
-    }
 
-    if (featureExist?.status !== "active") {
-      return res.status(400).json({
-        success: false,
-        message: "Feature is currently not active",
-      });
+      if (!featureExist) {
+        return res.status(404).json({
+          success: false,
+          message: "Feature not found",
+        });
+      }
+
+      if (featureExist?.active !== true) {
+        return res.status(400).json({
+          success: false,
+          message: "You've inclueded the feature which is currently not active",
+        });
+      }
     }
 
     const existingRole = await Role.findOne({
@@ -95,15 +91,17 @@ export const createRole = async (req: Request, res: Response) => {
         { transaction: t }
       );
 
-      await RoleFeature.create(
-        {
-          role_id: role.id,
-          feature_id: feature.feature_id,
-          enabled: feature.enabled,
-          access: feature.access,
-        },
-        { transaction: t }
-      );
+      for (const feature of features) {
+        await RoleFeature.create(
+          {
+            role_id: role.id,
+            feature_id: feature.feature_id,
+            enabled: feature.enabled,
+            access: feature.access,
+          },
+          { transaction: t }
+        );
+      }
 
       return Role.findByPk(role.id, {
         include: [
