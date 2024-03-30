@@ -186,7 +186,7 @@ export const addFeature = async (req: Request, res: Response) => {
     });
 
     if (roleFeature) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         message: "Feature already exists in the role",
       });
