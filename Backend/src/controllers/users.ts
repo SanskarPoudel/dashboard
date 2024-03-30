@@ -167,7 +167,7 @@ export const removeRole = async (req: CustomRequest, res: Response) => {
     };
 
     if (req.user?.id === user_id) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         message: "You cannot remove your own role",
       });

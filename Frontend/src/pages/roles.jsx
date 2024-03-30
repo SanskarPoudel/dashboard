@@ -129,17 +129,17 @@ const Roles = () => {
     }
   };
 
-  const deleteRole = async (roleId) => {
+  const deleteRole = async (role) => {
     try {
       const response = await axios.delete(
-        `${apiUrl}/api/role/delete?id=${roleId}`,
+        `${apiUrl}/api/role/delete?id=${role.id}`,
         {
           withCredentials: true,
         }
       );
 
       setAllRoles((prev) => {
-        const final = prev.filter((pr) => pr.id !== roleId);
+        const final = prev.filter((pr) => pr.id !== role.id);
         return final;
       });
 
@@ -177,7 +177,7 @@ const Roles = () => {
           <div key={role.id} className="p-4 md:w-1/2 lg:w-1/3">
             <div className="relative h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden shadow-lg">
               <button
-                onClick={() => deleteRole(role.id)}
+                onClick={() => deleteRole(role)}
                 className="absolute top-0 right-0 m-2 text-red-500 hover:text-red-700"
               >
                 <FaTrash />
@@ -291,8 +291,18 @@ const Roles = () => {
                 {!addingFeature && (
                   <button
                     onClick={() => {
-                      setAddingFeature(true);
-                      setAddingOnrole(role);
+                      const allFeature = role.Features.map(
+                        (feat) => feat.feature_name
+                      );
+
+                      if (allFeature.includes("admin")) {
+                        return toast.error(
+                          "Admin feature is enough for accessing everything in dashboard"
+                        );
+                      } else {
+                        setAddingFeature(true);
+                        setAddingOnrole(role);
+                      }
                     }}
                     className="mt-4 flex  items-center gap-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                   >
