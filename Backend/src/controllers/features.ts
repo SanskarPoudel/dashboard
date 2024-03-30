@@ -98,12 +98,6 @@ export const deleteFeature = async (req: Request, res: Response) => {
       });
     }
 
-    await Feature.destroy({
-      where: {
-        id: id,
-      },
-    });
-
     const roleFeaturesExists = await RoleFeature.findAll({
       where: {
         feature_id: id,
@@ -117,6 +111,12 @@ export const deleteFeature = async (req: Request, res: Response) => {
           "This feature is assigned to a role . Please remove it to continue",
       });
     }
+
+    await Feature.destroy({
+      where: {
+        id: id,
+      },
+    });
 
     return res.status(200).json({
       success: true,
