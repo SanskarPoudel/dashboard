@@ -5,7 +5,6 @@ import cors from "cors";
 import UserRoutes from "./routes/userRoutes";
 import RoleRoutes from "./routes/roleRoutes";
 import FeatureRoutes from "./routes/featureRoutes";
-import { insertInitialData } from "./utils/initialInsert";
 
 const app = express();
 
