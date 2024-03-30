@@ -38,7 +38,7 @@ CREATE TABLE `features` (
 
 LOCK TABLES `features` WRITE;
 /*!40000 ALTER TABLE `features` DISABLE KEYS */;
-INSERT INTO `features` VALUES (1,'admin',1,'2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,'reviewleads',1,'2024-03-30 11:26:07','2024-03-30 11:26:07'),(3,'addfaqs',1,'2024-03-30 11:26:07','2024-03-30 11:26:07'),(4,'admin',1,'2024-03-30 11:30:43','2024-03-30 11:30:43'),(5,'reviewleads',1,'2024-03-30 11:30:43','2024-03-30 11:30:43'),(6,'addfaqs',1,'2024-03-30 11:30:43','2024-03-30 11:30:43');
+INSERT INTO `features` VALUES (1,'admin',1,'2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,'reviewleads',1,'2024-03-30 11:26:07','2024-03-30 11:26:07'),(3,'addfaqs',1,'2024-03-30 11:26:07','2024-03-30 11:26:07');
 /*!40000 ALTER TABLE `features` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +70,7 @@ CREATE TABLE `role_features` (
 
 LOCK TABLES `role_features` WRITE;
 /*!40000 ALTER TABLE `role_features` DISABLE KEYS */;
-INSERT INTO `role_features` VALUES (1,1,1,'write','2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,2,1,'write','2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,3,1,'write','2024-03-30 11:26:07','2024-03-30 11:26:07'),(3,4,1,'write','2024-03-30 11:30:43','2024-03-30 11:30:43'),(4,5,1,'write','2024-03-30 11:30:43','2024-03-30 11:30:43'),(4,6,1,'write','2024-03-30 11:30:43','2024-03-30 11:30:43');
+INSERT INTO `role_features` VALUES (1,1,1,'write','2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,2,1,'write','2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,3,1,'write','2024-03-30 11:26:07','2024-03-30 11:26:07');
 /*!40000 ALTER TABLE `role_features` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'Administrator','2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,'Moderator level 1','2024-03-30 11:26:07','2024-03-30 11:26:07'),(3,'Administrator','2024-03-30 11:30:43','2024-03-30 11:30:43'),(4,'Moderator level 1','2024-03-30 11:30:43','2024-03-30 11:30:43');
+INSERT INTO `roles` VALUES (1,'Administrator','2024-03-30 11:26:07','2024-03-30 11:26:07'),(2,'Moderator level 1','2024-03-30 11:26:07','2024-03-30 11:26:07');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-30 17:43:42
+-- Dump completed on 2024-03-30 18:27:37
