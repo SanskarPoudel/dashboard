@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUserInfo } from "../contexts/userInfo";
 
 const withPermissions = (WrappedComponent, requiredPermissions) => {
   return function WithPermissions(props) {
-    const { featuresAccess } = useUserInfo();
+    const { featuresAccess, loadingInfo } = useUserInfo();
 
     const router = useRouter();
 
@@ -27,11 +27,11 @@ const withPermissions = (WrappedComponent, requiredPermissions) => {
         )
       );
 
-    React.useEffect(() => {
-      if (!hasPermission) {
+    useEffect(() => {
+      if (loadingInfo === false && !hasPermission) {
         router.push("/");
       }
-    }, [hasPermission, router]);
+    }, [hasPermission, router, loadingInfo]);
 
     if (hasPermission) {
       return <WrappedComponent {...props} />;
