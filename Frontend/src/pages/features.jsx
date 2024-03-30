@@ -48,7 +48,7 @@ const Features = () => {
   };
 
   const handleDisableFeature = async (feature) => {
-    if (feature.feature_name) {
+    if (feature.feature_name === "admin") {
       return toast.error(
         "You cannot disable admin as you will also be kicked out from accessing commanding functionalities.. Haha"
       );
@@ -88,7 +88,7 @@ const Features = () => {
   };
 
   const deleteFeature = async (feature) => {
-    if (feature.feature_name) {
+    if (feature.feature_name === "admin") {
       return toast.error(
         "You cannot delete admin as you will also be kicked out from accessing commanding functionalities.. Haha"
       );
