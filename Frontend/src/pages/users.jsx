@@ -132,7 +132,9 @@ const Users = () => {
       });
 
       toast.success("Role Removed Successfully");
-    } catch (err) {}
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Something went wrong");
+    }
   };
   const showRoleAssignmentModal = (user) => {
     setSelectedUserId(user.id);
