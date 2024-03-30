@@ -8,11 +8,11 @@ const withPermissions = (WrappedComponent, requiredPermissions) => {
 
     const router = useRouter();
 
-    const hasRequiredAccess = (userAccess, requiredAccess) => {
-      if (userAccess === requiredAccess) return true;
-      if (requiredAccess === "read" && userAccess === "write") return true;
-      return false;
-    };
+    // const hasRequiredAccess = (userAccess, requiredAccess) => {
+    //   if (userAccess === requiredAccess) return true;
+    //   if (requiredAccess === "read" && userAccess === "write") return true;
+    //   return false;
+    // };
 
     const isAdmin = featuresAccess?.some(
       (feature) => feature.feature === "admin"
@@ -22,9 +22,8 @@ const withPermissions = (WrappedComponent, requiredPermissions) => {
       isAdmin ||
       requiredPermissions.every((requiredPermission) =>
         featuresAccess?.some(
-          (userFeature) =>
-            userFeature.feature === requiredPermission.feature &&
-            hasRequiredAccess(userFeature.access, requiredPermission.access)
+          (userFeature) => userFeature.feature === requiredPermission
+          // hasRequiredAccess(userFeature.access, requiredPermission.access)
         )
       );
 
