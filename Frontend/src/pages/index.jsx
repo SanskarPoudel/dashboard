@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useUserInfo } from "../../contexts/userInfo";
+import { useUserInfo } from "../contexts/userInfo";
 const apiUrl = process.env.API_URL;
 
 export default function Home() {
