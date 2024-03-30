@@ -63,10 +63,10 @@ export const createFeature = async (req: Request, res: Response) => {
 
 export const updateFeature = async (req: Request, res: Response) => {
   try {
-    const { id, status } = req.body as { id: number; status: boolean };
+    const { id, active } = req.body as { id: number; active: boolean };
 
     await Feature.update(
-      { status: status },
+      { active: active },
       {
         where: {
           id: id,
