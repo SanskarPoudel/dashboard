@@ -19,14 +19,6 @@ app.use(
   })
 );
 
-app.get("/api/initiatedata", async (req, res) => {
-  await insertInitialData();
-  return res.status(200).json({
-    success: true,
-    message: "Inserted successfully",
-  });
-});
-
 app.use("/api/user", UserRoutes);
 app.use("/api/role", RoleRoutes);
 app.use("/api/feature", FeatureRoutes);
