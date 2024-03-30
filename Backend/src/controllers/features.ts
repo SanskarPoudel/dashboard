@@ -36,7 +36,7 @@ export const createFeature = async (req: Request, res: Response) => {
     });
 
     if (featureExists) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         message: "Feature with this name already exists",
       });
