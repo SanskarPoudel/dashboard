@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "../components/layout";
-import withPermissions from "../../HOC/PermissionCheck";
+import withPermissions from "../HOC/PermissionCheck";
 
 const Dashboard = () => {
   return (

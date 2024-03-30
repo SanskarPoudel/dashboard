@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useUserInfo } from "../../../contexts/userInfo";
+import { useUserInfo } from "../../contexts/userInfo";
 
 const SideBar = () => {
   const { featuresAccess } = useUserInfo();

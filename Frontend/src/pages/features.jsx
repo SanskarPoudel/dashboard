@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../components/layout";
-import withPermissions from "../../HOC/PermissionCheck";
+import withPermissions from "../HOC/PermissionCheck";
 import { ToastContainer, toast } from "react-toastify";
 
 const apiUrl = process.env.API_URL;

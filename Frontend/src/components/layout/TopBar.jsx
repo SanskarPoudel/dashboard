@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useUserInfo } from "../../../contexts/userInfo";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useUserInfo } from "../../contexts/userInfo";
 const apiUrl = process.env.API_URL;
 const TopBar = () => {
   const { userDetails, setUserDeatils } = useUserInfo();
