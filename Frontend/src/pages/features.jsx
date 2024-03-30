@@ -48,6 +48,12 @@ const Features = () => {
   };
 
   const handleDisableFeature = async (feature) => {
+    if (feature.feature_name) {
+      return toast.error(
+        "You cannot disable admin as you will also be kicked out from accessing commanding functionalities.. Haha"
+      );
+    }
+
     try {
       setDisabling(true);
       const response = await axios.post(
@@ -81,17 +87,22 @@ const Features = () => {
     }
   };
 
-  const deleteFeature = async (id) => {
+  const deleteFeature = async (feature) => {
+    if (feature.feature_name) {
+      return toast.error(
+        "You cannot delete admin as you will also be kicked out from accessing commanding functionalities.. Haha"
+      );
+    }
     try {
       setDeleting(true);
 
-      await axios.delete(`${apiUrl}/api/feature/delete?id=${id}`, {
+      await axios.delete(`${apiUrl}/api/feature/delete?id=${feature.id}`, {
         withCredentials: true,
       });
 
       setAllFeatures((prev) => {
         const final = prev.filter((pr) => {
-          return pr.id !== id;
+          return pr.id !== feature.id;
         });
 
         return final;
@@ -172,7 +183,7 @@ const Features = () => {
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                      onClick={() => deleteFeature(feature.id)}
+                      onClick={() => deleteFeature(feature)}
                     >
                       {deleting ? "Deleting.." : "Delete"}
                     </button>
