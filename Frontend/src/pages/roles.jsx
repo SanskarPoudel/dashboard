@@ -129,6 +129,26 @@ const Roles = () => {
     }
   };
 
+  const deleteRole = async (roleId) => {
+    try {
+      const response = await axios.delete(
+        `${apiUrl}/api/role/delete?id=${roleId}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setAllRoles((prev) => {
+        const final = prev.filter((pr) => pr.id !== roleId);
+        return final;
+      });
+
+      toast.success("Role deleted successfully");
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Something went wrong");
+    }
+  };
+
   return (
     <Layout>
       <button
@@ -137,7 +157,6 @@ const Roles = () => {
       >
         <FaPlus /> Create New Role
       </button>
-      <ToastContainer />
       {addingFeature && (
         <AddFeatureModal
           setAddingFeature={setAddingFeature}
@@ -156,7 +175,14 @@ const Roles = () => {
       <div className="flex flex-wrap -m-4">
         {allRoles.map((role) => (
           <div key={role.id} className="p-4 md:w-1/2 lg:w-1/3">
-            <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden shadow-lg">
+            <div className="relative h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden shadow-lg">
+              <button
+                onClick={() => deleteRole(role.id)}
+                className="absolute top-0 right-0 m-2 text-red-500 hover:text-red-700"
+              >
+                <FaTrash />
+              </button>
+
               <div className="p-6">
                 <h2 className="text-base font-medium text-indigo-600">
                   Role ID: {role.id}

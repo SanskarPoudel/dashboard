@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FaSave, FaTimes } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const AddFeatureModal = ({
   allFeatures,
@@ -75,7 +74,6 @@ const AddFeatureModal = ({
         }
       }}
     >
-      <ToastContainer />
       <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg dark:bg-gray-700 space-y-4">
         <h3 className="text-2xl font-semibold text-center mb-4">
           Add New Feature

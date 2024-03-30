@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useUserInfo } from "../../contexts/userInfo";
 const apiUrl = process.env.API_URL;
@@ -95,7 +94,6 @@ export default function Home() {
 
   return (
     <>
-      <ToastContainer />
       <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
         <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
           <h2 className="text-xl font-bold text-center mb-4">

@@ -3,7 +3,6 @@ import axios from "axios";
 import Layout from "../components/layout";
 import withPermissions from "../../HOC/PermissionCheck";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const apiUrl = process.env.API_URL;
 
@@ -109,7 +108,6 @@ const Features = () => {
 
   return (
     <Layout>
-      <ToastContainer />
       <div className="m-4">
         <form
           onSubmit={async (e) => {
