@@ -79,7 +79,7 @@ export const createRole = async (req: Request, res: Response) => {
     });
 
     if (existingRole) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         message: "Role with the name already exists",
       });
@@ -280,7 +280,7 @@ export const updateRoleFeature = async (req: Request, res: Response) => {
     });
 
     if (!roleFeature) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         message: "Role feature not found",
       });
