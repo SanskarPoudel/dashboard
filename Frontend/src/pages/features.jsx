@@ -164,7 +164,13 @@ const Features = () => {
                       className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
                       onClick={() => handleDisableFeature(feature)}
                     >
-                      {disabling ? "Disabling.." : "Disable"}
+                      {disabling
+                        ? feature.active
+                          ? "Disabling.."
+                          : "Enabling.."
+                        : feature.active
+                        ? "Disable"
+                        : "Enable"}
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
