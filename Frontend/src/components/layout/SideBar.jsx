@@ -8,21 +8,20 @@ const SideBar = () => {
 
   const finalFeatures = featuresAccess?.map((feat) => feat.feature);
 
-  console.log(finalFeatures);
   const router = useRouter();
   const navigation = [
     { name: "Home", href: "/dashboard" },
-    finalFeatures.includes("admin") && {
+    finalFeatures?.includes("admin") && {
       name: "Features",
       subName: "( admin only )",
       href: "/features",
     },
-    finalFeatures.includes("admin") && {
+    finalFeatures?.includes("admin") && {
       name: "Roles",
       subName: "( admin only )",
       href: "/roles",
     },
-    finalFeatures.includes("admin") && {
+    finalFeatures?.includes("admin") && {
       name: "Users",
       subName: "( admin only )",
       href: "/users",

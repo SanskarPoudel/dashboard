@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/layout";
+import withPermissions from "../../HOC/PermissionCheck";
 
 const Users = () => {
   return (
@@ -10,4 +11,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default withPermissions(Users, ["admin"]);
