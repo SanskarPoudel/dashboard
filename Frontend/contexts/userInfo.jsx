@@ -9,10 +9,12 @@ const apiUrl = process.env.API_URL;
 export const UserInfoProvider = ({ children }) => {
   const [featuresAccess, setFeaturesAccess] = useState([]);
   const [userDetails, setUserDeatils] = useState(null);
+  const [loadingInfo, setLoadingInfo] = useState(true);
   const router = useRouter();
 
   const fetchUserDetails = async () => {
     try {
+      setLoadingInfo(true);
       const response = await axios.get(`${apiUrl}/api/user/details`, {
         withCredentials: true,
       });
@@ -40,7 +42,10 @@ export const UserInfoProvider = ({ children }) => {
         email: allDetails.email,
         joinedAt: allDetails.createdAt,
       });
+      setLoadingInfo(false);
     } catch (err) {
+      setLoadingInfo(false);
+
       if (router.pathname !== "/") {
         toast.error("Login To Continue");
       }
@@ -56,7 +61,13 @@ export const UserInfoProvider = ({ children }) => {
 
   return (
     <UserInfoContext.Provider
-      value={{ featuresAccess, userDetails, setUserDeatils, setFeaturesAccess }}
+      value={{
+        featuresAccess,
+        userDetails,
+        setUserDeatils,
+        setFeaturesAccess,
+        loadingInfo,
+      }}
     >
       {children}
     </UserInfoContext.Provider>
