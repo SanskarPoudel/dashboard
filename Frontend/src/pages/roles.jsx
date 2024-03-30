@@ -5,7 +5,7 @@ import axios from "axios";
 import { FaEdit, FaTrash, FaSave, FaTimes, FaPlus } from "react-icons/fa"; // Import icons
 import AddFeatureModal from "../components/modals/AddFeatureModal";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import CreateRoleModal from "../components/modals/CreateRoleModa";
 
 const apiUrl = process.env.API_URL;
 
@@ -19,6 +19,7 @@ const Roles = () => {
     access: "",
     enabled: false,
   });
+  const [showingCreateRole, setShowingCreateRole] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,16 +131,29 @@ const Roles = () => {
 
   return (
     <Layout>
+      <button
+        onClick={() => setShowingCreateRole(true)}
+        className="my-4 flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+      >
+        <FaPlus /> Create New Role
+      </button>
       <ToastContainer />
+      {addingFeature && (
+        <AddFeatureModal
+          setAddingFeature={setAddingFeature}
+          setAllRoles={setAllRoles}
+          allFeatures={allFeatures}
+          addingOnrole={addingOnrole}
+        />
+      )}
+      {showingCreateRole && (
+        <CreateRoleModal
+          setShowingCreateRole={setShowingCreateRole}
+          allFeatures={allFeatures}
+          setAllRoles={setAllRoles}
+        />
+      )}
       <div className="flex flex-wrap -m-4">
-        {addingFeature && (
-          <AddFeatureModal
-            setAddingFeature={setAddingFeature}
-            setAllRoles={setAllRoles}
-            allFeatures={allFeatures}
-            addingOnrole={addingOnrole}
-          />
-        )}
         {allRoles.map((role) => (
           <div key={role.id} className="p-4 md:w-1/2 lg:w-1/3">
             <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden shadow-lg">
