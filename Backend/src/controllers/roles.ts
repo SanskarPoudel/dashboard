@@ -369,7 +369,7 @@ export const removeRoleFeature = async (req: Request, res: Response) => {
     });
 
     if (roleFeatures.length <= 1) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         message: "One feature is mandatory in a role",
       });
