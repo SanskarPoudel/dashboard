@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/layout";
-import withPermissions from "../../HOC/PermissionCheck";
 import axios from "axios";
 import { FaEdit, FaTrash, FaSave, FaTimes, FaPlus } from "react-icons/fa"; // Import icons
 import AddFeatureModal from "../components/modals/AddFeatureModal";
 import { ToastContainer, toast } from "react-toastify";
 import CreateRoleModal from "../components/modals/CreateRoleModa";
+import withPermissions from "../HOC/PermissionCheck";
 
 const apiUrl = process.env.API_URL;
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaTimes, FaEdit } from "react-icons/fa";
-import withPermissions from "../../HOC/PermissionCheck";
+import withPermissions from "../HOC/PermissionCheck";
 
 const apiUrl = process.env.API_URL;
 
